@@ -1,0 +1,93 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Maquina de estados Order" id="Maquina_de_estados_Order">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t3" value="&lt;b&gt;Máquina de estados del Aggregate Order — TechStore&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="30" y="20" width="900" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" value="Notación: &lt;i&gt;operación()&lt;/i&gt; [condición] / EventoEmitido" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="30" y="50" width="700" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="s5" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="40" y="177" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="s6" value="&lt;b style='font-size:14px'&gt;DRAFT&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;color:#333'&gt;pedido editable&lt;br/&gt;(todos los pedidos inician aquí)&lt;/span&gt;" style="rounded=1;arcSize=22;whiteSpace=wrap;html=1;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="210" y="150" width="190" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="s7" value="&lt;b style='font-size:14px'&gt;CONFIRMED&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;color:#333'&gt;listo para enviar&lt;/span&gt;" style="rounded=1;arcSize=22;whiteSpace=wrap;html=1;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="590" y="150" width="170" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="s8" value="&lt;b style='font-size:14px'&gt;SHIPPED&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;color:#333'&gt;en camino, con guía&lt;/span&gt;" style="rounded=1;arcSize=22;whiteSpace=wrap;html=1;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="960" y="150" width="170" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="s9" value="&lt;b style='font-size:14px'&gt;DELIVERED&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;color:#333'&gt;estado final&lt;/span&gt;" style="rounded=1;arcSize=22;whiteSpace=wrap;html=1;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#3d7a33;" parent="1" vertex="1">
+          <mxGeometry x="1330" y="150" width="170" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="s10" value="&lt;b style='font-size:14px'&gt;CANCELLED&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;color:#333'&gt;estado final&lt;/span&gt;" style="rounded=1;arcSize=22;whiteSpace=wrap;html=1;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="590" y="400" width="170" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="s11" value="&lt;b style='font-size:14px'&gt;RETURNED&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;color:#333'&gt;estado final&lt;/span&gt;" style="rounded=1;arcSize=22;whiteSpace=wrap;html=1;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="960" y="400" width="170" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="s12" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="1560" y="175" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="s13" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="661" y="560" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="s14" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="1031" y="560" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="load_fixture()&lt;br/&gt;Order(...)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" edge="1" source="s5" target="s6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="&lt;b&gt;confirm()&lt;/b&gt;&lt;br/&gt;[≥ 1 artículo y&lt;br/&gt;cliente activo]&lt;br/&gt;/ &lt;b&gt;OrderConfirmed&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" edge="1" source="s6" target="s7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="&lt;b&gt;ship(guía)&lt;/b&gt;&lt;br/&gt;[guía no vacía]&lt;br/&gt;/ &lt;b&gt;OrderShipped&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" edge="1" source="s7" target="s8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="&lt;b&gt;deliver()&lt;/b&gt;&lt;br/&gt;/ &lt;b&gt;OrderDelivered&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" edge="1" source="s8" target="s9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="&lt;b&gt;cancel(motivo)&lt;/b&gt;&lt;br/&gt;[motivo no vacío]&lt;br/&gt;/ &lt;b&gt;OrderCancelled&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" edge="1" source="s7" target="s10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="&lt;b&gt;return_order()&lt;/b&gt;&lt;br/&gt;/ &lt;b&gt;OrderReturned&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" edge="1" source="s8" target="s11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="&lt;b&gt;add_item(item)&lt;/b&gt; [unidades + cantidad ≤ 20]&lt;br/&gt;sin evento" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=0.25;exitY=0;entryX=0.75;entryY=0;" parent="1" edge="1" source="s6" target="s6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="257" y="110" />
+              <mxPoint x="352" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" edge="1" source="s9" target="s12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" edge="1" source="s10" target="s13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;endSize=8;strokeWidth=1.5;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" edge="1" source="s11" target="s14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n25" value="&lt;b&gt;Transiciones no permitidas&lt;/b&gt;&lt;br/&gt;Cualquier operación que no aparece como flecha desde el estado actual lanza &lt;b&gt;InvalidOrderTransition&lt;/b&gt; (HTTP 409).&lt;br/&gt;Ejemplos: confirmar desde CONFIRMED (E12), cancelar desde SHIPPED (E13), agregar artículos fuera de DRAFT." style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
+          <mxGeometry x="1200" y="395" width="380" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="n26" value="&lt;b&gt;Condición que no se cumple&lt;/b&gt;&lt;br/&gt;Lanza &lt;b&gt;InvalidOrderData&lt;/b&gt; (HTTP 422): pedido vacío (E06), cliente inactivo (E03), envío sin guía (E11), cancelar sin motivo.&lt;br/&gt;&lt;b&gt;OrderItemLimitExceeded&lt;/b&gt; (HTTP 422): más de 20 unidades (E08)." style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
+          <mxGeometry x="1200" y="490" width="380" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="n27" value="&lt;b&gt;Orden de cada transición&lt;/b&gt;&lt;br/&gt;1. validar estado y condiciones&lt;br/&gt;2. cambiar status&lt;br/&gt;3. registrar el Domain Event&lt;br/&gt;Si el paso 1 falla, el estado y la lista de eventos no cambian." style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
+          <mxGeometry x="150" y="395" width="330" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="n28" value="&lt;b&gt;DomainEvent&lt;/b&gt; (inmutable)&lt;br/&gt;name · order_id · customer_id&lt;br/&gt;total (Money) · detail (guía o motivo)&lt;br/&gt;occurred_at (UTC)" style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
+          <mxGeometry x="150" y="495" width="330" height="74" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
