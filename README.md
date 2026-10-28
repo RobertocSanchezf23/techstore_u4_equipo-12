@@ -40,7 +40,7 @@ python -m pip install -r requirements.txt
 | Ejecutar los escenarios E01–E15 (una línea por caso) | `python ejecutar_escenarios.py` |
 | Correr las pruebas | `python -m pytest -v` |
 | Levantar la API | `uvicorn app.api:app --reload` |
-| Documentación Swagger | http://127.0.0.1:8000/docs |
+| Documentación Swagger (también funciona sin internet) | http://127.0.0.1:8000/docs |
 | Contrato OpenAPI | http://127.0.0.1:8000/openapi.json |
 
 ## Estructura
@@ -54,7 +54,8 @@ techstore-u4/
 │   ├── domain.py           ← Money, Customer, OrderItem, Order, estados, eventos, excepciones
 │   ├── specifications.py   ← Specifications, AND/OR/NOT y reglas de descuento
 │   ├── services.py         ← Application Service y repositorio en memoria
-│   └── api.py              ← endpoints FastAPI y traducción de excepciones a HTTP
+│   ├── api.py              ← endpoints FastAPI y traducción de excepciones a HTTP
+│   └── static/             ← archivos de Swagger UI para usar /docs sin internet
 ├── tests/                  ← pruebas pytest (dominio, specifications, escenarios y API)
 └── docs/                   ← diagrama de estados y evidencias
 ```
