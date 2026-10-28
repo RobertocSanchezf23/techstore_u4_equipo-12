@@ -9,9 +9,12 @@ Ejecutar:  uvicorn app.api:app --reload
 Swagger:   http://127.0.0.1:8000/docs
 """
 from decimal import Decimal
+from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.domain import Customer, DomainException, InvalidOrderTransition, Order
@@ -35,7 +38,28 @@ Las respuestas exitosas incluyen `message`, un texto para el usuario. Los errore
 `detail` (mensaje para el usuario) y `error` (nombre técnico de la excepción del dominio).
 """
 
-app = FastAPI(title="TechStore U4", version="1.0.0", description=DESCRIPTION)
+# docs_url=None: la página /docs se define abajo con archivos locales de Swagger UI,
+# para que funcione aunque la computadora no tenga internet.
+app = FastAPI(title="TechStore U4", version="1.0.0", description=DESCRIPTION,
+              docs_url=None, redoc_url=None)
+app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static")
+
+
+@app.get("/docs", include_in_schema=False)
+def swagger_ui():
+    return get_swagger_ui_html(
+        openapi_url=app.openapi_url,
+        title="TechStore U4 - Swagger UI",
+        swagger_js_url="/static/swagger-ui-bundle.js",
+        swagger_css_url="/static/swagger-ui.css",
+        swagger_favicon_url="/static/favicon-32x32.png",
+    )
+
+
+@app.get("/", include_in_schema=False)
+def home():
+    """La dirección principal lleva directo a la documentación."""
+    return RedirectResponse(url="/docs")
 
 
 # ---------------------------------------------------------------------------

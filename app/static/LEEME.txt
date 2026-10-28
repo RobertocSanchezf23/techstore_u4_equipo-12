@@ -1,0 +1,2 @@
+Archivos de Swagger UI 5.34.0 (https://github.com/swagger-api/swagger-ui, licencia Apache 2.0).
+Se incluyen en el proyecto para que la documentación /docs funcione sin conexión a internet.
