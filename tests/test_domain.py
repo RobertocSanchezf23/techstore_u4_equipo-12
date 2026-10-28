@@ -204,6 +204,7 @@ def test_envio_valido_guarda_la_guia_en_el_evento():
     assert order.status == OrderStatus.SHIPPED
     assert order.events[-1].name == "OrderShipped"
     assert order.events[-1].detail == "GUIA-1"
+    assert order.events[-1].description == "Pedido enviado con la guía GUIA-1"
 
 
 def test_cancelar_desde_confirmed_con_motivo():
@@ -255,3 +256,15 @@ def test_estados_finales_no_admiten_mas_transiciones(final_state):
             operation()
     assert order.status == final_state
     assert len(order.events) == events
+
+
+@pytest.mark.parametrize("operation, expected", [
+    (lambda o: o.ship("G"), "Este pedido aún no ha sido confirmado; primero confírmalo para poder enviarlo."),
+    (lambda o: (o.confirm(), o.deliver()), "Este pedido todavía no ha sido enviado; primero envíalo para poder entregarlo."),
+    (lambda o: (o.confirm(), o.confirm()), "Este pedido ya fue confirmado; no se puede confirmar otra vez."),
+])
+def test_mensajes_de_transicion_claros_para_el_usuario(operation, expected):
+    order = make_order()
+    with pytest.raises(InvalidOrderTransition) as error:
+        operation(order)
+    assert str(error.value) == expected

@@ -30,6 +30,9 @@ Usa `POST /fixtures/reload` para volver a los datos originales entre pruebas.
 | 404 | El pedido no existe |
 | 409 | Transición de estado no permitida (`InvalidOrderTransition`) |
 | 422 | Datos inválidos según el dominio (`InvalidOrderData`, `OrderItemLimitExceeded`) |
+
+Las respuestas exitosas incluyen `message`, un texto para el usuario. Los errores incluyen
+`detail` (mensaje para el usuario) y `error` (nombre técnico de la excepción del dominio).
 """
 
 app = FastAPI(title="TechStore U4", version="1.0.0", description=DESCRIPTION)
@@ -92,11 +95,16 @@ class ItemDTO(BaseModel):
 
 class EventDTO(BaseModel):
     name: str
-    detail: str
+    description: str
     occurred_at: str
 
 
+STATUS_TEXT = {"DRAFT": "en borrador", "CONFIRMED": "confirmado", "SHIPPED": "enviado",
+               "DELIVERED": "entregado", "CANCELLED": "cancelado", "RETURNED": "devuelto"}
+
+
 class OrderDTO(BaseModel):
+    message: str
     id: str
     customer_id: str
     customer_vip: bool
@@ -110,8 +118,9 @@ class OrderDTO(BaseModel):
     events: list[EventDTO]
 
     @classmethod
-    def from_order(cls, order: Order) -> "OrderDTO":
+    def from_order(cls, order: Order, message: str | None = None) -> "OrderDTO":
         return cls(
+            message=message or f"El pedido {order.id} está {STATUS_TEXT[order.status.value]}.",
             id=order.id,
             customer_id=order.customer.id,
             customer_vip=order.customer.is_vip,
@@ -127,7 +136,7 @@ class OrderDTO(BaseModel):
                 for i in order.items
             ],
             events=[
-                EventDTO(name=e.name, detail=e.detail, occurred_at=e.occurred_at.isoformat())
+                EventDTO(name=e.name, description=e.description, occurred_at=e.occurred_at.isoformat())
                 for e in order.events
             ],
         )
@@ -142,6 +151,7 @@ class OrderSummaryDTO(BaseModel):
 
 
 class DiscountDTO(BaseModel):
+    message: str
     order_id: str
     percent: Decimal
     rule: str
@@ -197,7 +207,12 @@ def get_order(order_id: str):
          tags=["Consultas"])
 def get_discount(order_id: str):
     result = service.discount(order_id)
-    return DiscountDTO(order_id=order_id, percent=result.percent, rule=result.rule,
+    if result.percent:
+        message = (f"El pedido {order_id} tiene {result.percent} % de descuento: paga "
+                   f"{result.total.amount} MXN en lugar de {result.subtotal.amount} MXN.")
+    else:
+        message = f"El pedido {order_id} no tiene descuento: paga {result.total.amount} MXN."
+    return DiscountDTO(message=message, order_id=order_id, percent=result.percent, rule=result.rule,
                        subtotal=result.subtotal.amount, discount=result.discount.amount,
                        total_with_discount=result.total.amount)
 
@@ -205,43 +220,46 @@ def get_discount(order_id: str):
 @app.post("/orders", response_model=OrderDTO, status_code=201, tags=["Pedidos"],
           responses={422: {"model": ErrorResponse, "description": "Cliente inexistente"}})
 def create_order(body: CreateOrderRequest):
-    return OrderDTO.from_order(service.create(body.customer_id, body.has_promotion))
+    order = service.create(body.customer_id, body.has_promotion)
+    return OrderDTO.from_order(order, f"Se creó el pedido {order.id} en borrador.")
 
 
 @app.post("/orders/{order_id}/items", response_model=OrderDTO, responses=TRANSITION_ERRORS,
           tags=["Pedidos"])
 def add_item(order_id: str, body: AddItemRequest):
-    return OrderDTO.from_order(service.add_item(order_id, body.sku, body.quantity))
+    order = service.add_item(order_id, body.sku, body.quantity)
+    return OrderDTO.from_order(order, f"Se agregaron {body.quantity} unidades de {body.sku} al pedido {order_id}.")
 
 
 @app.post("/orders/{order_id}/confirm", response_model=OrderDTO, responses=TRANSITION_ERRORS,
           tags=["Transiciones"])
 def confirm_order(order_id: str):
-    return OrderDTO.from_order(service.confirm(order_id))
+    return OrderDTO.from_order(service.confirm(order_id), f"El pedido {order_id} se confirmó correctamente.")
 
 
 @app.post("/orders/{order_id}/ship", response_model=OrderDTO, responses=TRANSITION_ERRORS,
           tags=["Transiciones"])
 def ship_order(order_id: str, body: ShipRequest):
-    return OrderDTO.from_order(service.ship(order_id, body.tracking_number))
+    order = service.ship(order_id, body.tracking_number)
+    return OrderDTO.from_order(order, f"El pedido {order_id} se envió con la guía {order.events[-1].detail}.")
 
 
 @app.post("/orders/{order_id}/cancel", response_model=OrderDTO, responses=TRANSITION_ERRORS,
           tags=["Transiciones"])
 def cancel_order(order_id: str, body: CancelRequest):
-    return OrderDTO.from_order(service.cancel(order_id, body.reason))
+    return OrderDTO.from_order(service.cancel(order_id, body.reason), f"El pedido {order_id} se canceló correctamente.")
 
 
 @app.post("/orders/{order_id}/deliver", response_model=OrderDTO, responses=TRANSITION_ERRORS,
           tags=["Transiciones"])
 def deliver_order(order_id: str):
-    return OrderDTO.from_order(service.deliver(order_id))
+    return OrderDTO.from_order(service.deliver(order_id), f"El pedido {order_id} se marcó como entregado.")
 
 
 @app.post("/orders/{order_id}/return", response_model=OrderDTO, responses=TRANSITION_ERRORS,
           tags=["Transiciones"])
 def return_order(order_id: str):
-    return OrderDTO.from_order(service.return_order(order_id))
+    return OrderDTO.from_order(service.return_order(order_id), f"El pedido {order_id} se registró como devuelto.")
 
 
 @app.post("/fixtures/reload", tags=["Utilidades"])

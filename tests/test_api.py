@@ -49,7 +49,8 @@ def test_confirmar_dos_veces_409():
     client.post("/orders/O013/confirm")
     response = client.post("/orders/O013/confirm")
     assert response.status_code == 409
-    assert "CONFIRMED" in response.json()["detail"]
+    assert response.json()["detail"] == "Este pedido ya fue confirmado; no se puede confirmar otra vez."
+    assert response.json()["error"] == "InvalidOrderTransition"
 
 
 def test_confirmar_pedido_vacio_422():
@@ -117,3 +118,17 @@ def test_reload_restaura_los_datos():
     client.post("/orders/O013/confirm")
     assert client.post("/fixtures/reload").json() == {"orders_loaded": 16}
     assert client.get("/orders/O013").json()["status"] == "DRAFT"
+
+
+def test_respuesta_exitosa_trae_mensaje_para_el_usuario():
+    body = client.post("/orders/O013/confirm").json()
+    assert body["message"] == "El pedido O013 se confirmó correctamente."
+    assert body["events"][0]["description"] == "Pedido confirmado"
+
+
+def test_mensajes_de_error_claros_para_el_usuario():
+    client.post("/orders/O014/confirm")
+    client.post("/orders/O014/ship", json={"tracking_number": "GUIA-O014"})
+    cancel = client.post("/orders/O014/cancel", json={"reason": "Cliente desiste"}).json()
+    assert cancel["detail"] == "Este pedido ya fue enviado, por eso ya no se puede cancelar."
+    assert client.get("/orders/O999").json()["detail"].startswith("No encontramos el pedido O999")

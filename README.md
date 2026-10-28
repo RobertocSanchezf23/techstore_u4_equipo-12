@@ -37,7 +37,7 @@ python -m pip install -r requirements.txt
 | Qué | Comando |
 |---|---|
 | Cargar los 16 pedidos de los CSV | `python cargar_csv.py` |
-| Ejecutar los escenarios E01–E15 | `python ejecutar_escenarios.py` |
+| Ejecutar los escenarios E01–E15 (una línea por caso) | `python ejecutar_escenarios.py` |
 | Correr las pruebas | `python -m pytest -v` |
 | Levantar la API | `uvicorn app.api:app --reload` |
 | Documentación Swagger | http://127.0.0.1:8000/docs |
@@ -120,6 +120,8 @@ Cada método valida primero, cambia el estado después y registra el evento al f
 | 404 | `OrderNotFound` — el pedido no existe |
 | 409 | `InvalidOrderTransition` — transición no permitida |
 | 422 | `InvalidOrderData`, `OrderItemLimitExceeded` — datos inválidos |
+
+Las respuestas exitosas traen un campo `message` para el usuario (por ejemplo, *"El pedido O013 se confirmó correctamente."*). Los errores traen `detail`, con un mensaje claro (*"Este pedido ya fue confirmado; no se puede confirmar otra vez."*), y `error`, con el nombre técnico de la excepción del dominio.
 
 ## Escenarios E01–E15
 

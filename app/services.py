@@ -14,7 +14,7 @@ class OrderNotFound(Exception):
     """El pedido solicitado no existe en el repositorio (no es una regla de negocio)."""
 
     def __init__(self, order_id: str):
-        super().__init__(f"El pedido {order_id} no existe")
+        super().__init__(f"No encontramos el pedido {order_id}. Revisa que el número sea correcto.")
 
 
 class CatalogNotFound(DomainException):
@@ -69,7 +69,7 @@ class OrderService:
     def create(self, customer_id: str, has_promotion: bool = False) -> Order:
         customer = self.customers.get(customer_id)
         if customer is None:
-            raise CatalogNotFound(f"El cliente {customer_id} no existe en el catálogo")
+            raise CatalogNotFound(f"No existe el cliente {customer_id} en el catálogo.")
         order = Order(customer=customer, id=self.repository.next_id(), has_promotion=has_promotion)
         self.repository.save(order)
         return order
@@ -78,7 +78,7 @@ class OrderService:
         order = self.repository.get(order_id)
         price = self.prices.get(sku)
         if price is None:
-            raise CatalogNotFound(f"El producto {sku} no existe en el catálogo")
+            raise CatalogNotFound(f"No existe el producto {sku} en el catálogo.")
         order.add_item(OrderItem(sku, quantity, Money(price)))
         self.repository.save(order)
         return order
