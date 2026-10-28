@@ -84,7 +84,7 @@
         <mxCell id="n27" value="&lt;b&gt;Orden de cada transición&lt;/b&gt;&lt;br/&gt;1. validar estado y condiciones&lt;br/&gt;2. cambiar status&lt;br/&gt;3. registrar el Domain Event&lt;br/&gt;Si el paso 1 falla, el estado y la lista de eventos no cambian." style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
           <mxGeometry x="150" y="395" width="330" height="84" as="geometry" />
         </mxCell>
-        <mxCell id="n28" value="&lt;b&gt;DomainEvent&lt;/b&gt; (inmutable)&lt;br/&gt;name · order_id · customer_id&lt;br/&gt;total (Money) · detail (guía o motivo)&lt;br/&gt;occurred_at (UTC)" style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
+        <mxCell id="n28" value="&lt;b&gt;DomainEvent&lt;/b&gt; (inmutable)&lt;br/&gt;name · order_id · customer_id · total (Money)&lt;br/&gt;description (qué pasó) · detail (guía o motivo)&lt;br/&gt;occurred_at (UTC)" style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;fontSize=10;fillColor=#fffde7;strokeColor=#b59f3b;" parent="1" vertex="1">
           <mxGeometry x="150" y="495" width="330" height="74" as="geometry" />
         </mxCell>
       </root>
