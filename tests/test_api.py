@@ -132,3 +132,10 @@ def test_mensajes_de_error_claros_para_el_usuario():
     cancel = client.post("/orders/O014/cancel", json={"reason": "Cliente desiste"}).json()
     assert cancel["detail"] == "Este pedido ya fue enviado, por eso ya no se puede cancelar."
     assert client.get("/orders/O999").json()["detail"].startswith("No encontramos el pedido O999")
+
+
+def test_swagger_funciona_sin_internet():
+    html = client.get("/docs").text
+    assert "/static/swagger-ui-bundle.js" in html and "cdn.jsdelivr.net" not in html
+    assert client.get("/static/swagger-ui-bundle.js").status_code == 200
+    assert client.get("/", follow_redirects=False).headers["location"] == "/docs"
